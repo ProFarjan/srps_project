@@ -82,6 +82,7 @@ include('includes/config.php');
                                                             <th>Subject</th>
                                                             <th>Marks</th>
                                                             <th>Letter Grade</th>
+                                                            <th>Grade Point</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -119,6 +120,23 @@ include('includes/config.php');
                                                                             echo "F";
                                                                         }
                                                                         ?></td>
+                                                                        <td><?php
+                                                                        if ($result->marks >= 40 && $result->marks <= 49) {
+                                                                            echo "1.00";
+                                                                        } else if ($result->marks >= 50 && $result->marks <= 59) {
+                                                                            echo "2.00";
+                                                                        } else if ($result->marks >= 60 && $result->marks <= 64) {
+                                                                            echo "3.00";
+                                                                        } else if ($result->marks >= 65 && $result->marks <= 69) {
+                                                                            echo "3.65";
+                                                                        } else if ($result->marks >= 70 && $result->marks <= 79) {
+                                                                            echo "4.00";
+                                                                        } else if ($result->marks >= 80 && $result->marks <= 100) {
+                                                                            echo "5.00";
+                                                                        } else {
+                                                                            echo "0.00";
+                                                                        }
+                                                                        ?></td>
                                                                 </tr>
                                                             <?php
                                                                 $totlcount += $totalmarks;
@@ -126,32 +144,32 @@ include('includes/config.php');
                                                             }
                                                             ?>
                                                             <tr>
-                                                                <th scope="row" colspan="3">Total Marks</th>
+                                                                <th scope="row" colspan="4">Total Marks</th>
                                                                 <td><b><?php echo htmlentities($totlcount); ?></b> out of <b><?php echo htmlentities($outof = ($cnt - 1) * 100); ?></b></td>
                                                             </tr>
                                                             <tr>
-                                                                <th scope="row" colspan="3">Percntage</th>
+                                                                <th scope="row" colspan="4">Percntage</th>
                                                                 <td><b><?php echo  htmlentities($totlcount * (100) / $outof); ?> %</b></td>
                                                             </tr>
                                                             <tr>
-                                                                <th scope="row" colspan="3">G.P.A</th>
+                                                                <th scope="row" colspan="4">G.P.A</th>
                                                                 <td><b>
                                                                         <?php
                                                                         $gpa_total = number_format($totlcount * (100) / $outof);
                                                                         if ($gpa_total >= 40 && $gpa_total <= 49) {
-                                                                            echo "D";
+                                                                            echo "1.00 (D)";
                                                                         } else if ($gpa_total >= 50 && $gpa_total <= 59) {
-                                                                            echo "C";
+                                                                            echo "2.00 (C)";
                                                                         } else if ($gpa_total >= 60 && $gpa_total <= 64) {
-                                                                            echo "B";
+                                                                            echo "3.00 (B)";
                                                                         } else if ($gpa_total >= 65 && $gpa_total <= 69) {
-                                                                            echo "A<sup>-</sup>";
+                                                                            echo "3.65 (A<sup>-</sup>)";
                                                                         } else if ($gpa_total >= 70 && $gpa_total <= 79) {
-                                                                            echo "A";
+                                                                            echo "4.00 (A)";
                                                                         } else if ($gpa_total >= 80 && $gpa_total <= 100) {
-                                                                            echo "A<sup>+</sup>";
+                                                                            echo "5.00 (A<sup>+</sup>)";
                                                                         } else {
-                                                                            echo "F";
+                                                                            echo "0.00 (F)";
                                                                         }
                                                                         ?>
                                                                     </b></td>
