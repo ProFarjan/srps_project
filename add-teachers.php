@@ -20,7 +20,7 @@ if(strlen($_SESSION['alogin'])==""){
         $designation=$_POST['designation'];
         $phone=$_POST['phone'];
         $email=$_POST['emailid'];
-        $password=$_POST['password'];
+        $password=md5($_POST['password']);
         $gender=$_POST['gender'];
         $dob =$_POST['dob'];
         $status=1;

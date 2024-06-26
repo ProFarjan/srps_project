@@ -18,12 +18,12 @@ $teacher_id=$_POST['teacher_id'];
 $designation=$_POST['designation'];
 $phone=$_POST['phone'];
 $email=$_POST['emailid'];
-$password=$_POST['password'];
+$password=md5($_POST['password']);
 $gender=$_POST['gender'];
 $dob =$_POST['dob'];
 $status=$_POST['status'];
 
-$sql="update tblstudents set fullanme=:fullanme,teacher_id=:teacher_id,designation=:designation,phone=:phone,email=:email,password=:password,gender=:gender,dob=:dob,status=:status where id=:id";
+$sql="update teachers set fullanme=:fullanme,teacher_id=:teacher_id,designation=:designation,phone=:phone,email=:email,password=:password,gender=:gender,dob=:dob,status=:status where id=:id";
 $query = $dbh->prepare($sql);
 $query->bindParam(':fullanme',$fullanme,PDO::PARAM_STR);
 $query->bindParam(':teacher_id',$teacher_id,PDO::PARAM_STR);

@@ -13,19 +13,22 @@ if(strlen($_SESSION['alogin'])==""){
 
     if(isset($_POST['submit'])){
 
-        $class=$_POST['class'];
-        $subject=$_POST['subject']; 
+        $teacher_id=$_POST['teacher_id'];
+        $class_id=$_POST['class_id'];
+        $subject_id=$_POST['subject_id'];
         $status=1;
-        $sql="INSERT INTO  tblsubjectcombination(ClassId,SubjectId,status) VALUES(:class,:subject,:status)";
+
+        $sql="INSERT INTO  teachercombination(teacher_id,class_id,subject_id,status) VALUES(:teacher_id,:class_id,:class_id,:status)";
         $query = $dbh->prepare($sql);
-        $query->bindParam(':class',$class,PDO::PARAM_STR);
-        $query->bindParam(':subject',$subject,PDO::PARAM_STR);
+        $query->bindParam(':teacher_id',$teacher_id,PDO::PARAM_STR);
+        $query->bindParam(':class_id',$class_id,PDO::PARAM_STR);
+        $query->bindParam(':subject_id',$subject_id,PDO::PARAM_STR);
         $query->bindParam(':status',$status,PDO::PARAM_STR);
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         if($lastInsertId){
 
-            $msg="Combination added successfully";
+            $msg="Teacher Combination added successfully";
 
         }else{
 
@@ -40,7 +43,7 @@ if(strlen($_SESSION['alogin'])==""){
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>SRM Admin Subject Combination< </title>
+        <title>SRM Admin Teacher Combination< </title>
         <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
         <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
         <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
@@ -68,7 +71,7 @@ if(strlen($_SESSION['alogin'])==""){
                      <div class="container-fluid">
                             <div class="row page-title-div">
                                 <div class="col-md-6">
-                                    <h2 class="title">Add Subject Combination</h2>
+                                    <h2 class="title">Add Teacher Combination</h2>
                                 
                                 </div>
                                 
@@ -79,8 +82,8 @@ if(strlen($_SESSION['alogin'])==""){
                                 <div class="col-md-6">
                                     <ul class="breadcrumb">
                                         <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                                        <li> Subjects</li>
-                                        <li class="active">Add Subject Combination</li>
+                                        <li> Teacher</li>
+                                        <li class="active">Add Teacher Combination</li>
                                     </ul>
                                 </div>
                              
@@ -94,7 +97,7 @@ if(strlen($_SESSION['alogin'])==""){
                                         <div class="panel">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
-                                                    <h5>Add Subject Combination</h5>
+                                                    <h5>Add Teacher Combination</h5>
                                                 </div>
                                             </div>
                                             <div class="panel-body">
@@ -108,10 +111,44 @@ else if($error){?>
                                         </div>
                                         <?php } ?>
                                                 <form class="form-horizontal" method="post">
-                                                    <div class="form-group">
-                                                        <label for="default" class="col-sm-2 control-label">Class</label>
+
+<div class="form-group">
+                                                        <label for="teacher_id" class="col-sm-2 control-label">Teacher</label>
                                                         <div class="col-sm-10">
- <select name="class" class="form-control" id="default" required="required">
+ <select name="teacher_id" class="form-control" id="teacher_id" required="required">
+<option value="">Select Teacher</option>
+<?php
+
+    $sql = "SELECT * from teachers";
+
+    $query = $dbh->prepare($sql);
+
+    $query->execute();
+
+    $results=$query->fetchAll(PDO::FETCH_OBJ);
+
+    if($query->rowCount() > 0){
+
+        foreach($results as $result){
+
+?>
+<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->fullanme); ?>&nbsp; ID-<?php echo htmlentities($result->teacher_id); ?></option>
+<?php
+
+    }
+
+}
+
+?>
+ </select>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="class_id" class="col-sm-2 control-label">Class</label>
+                                                        <div class="col-sm-10">
+ <select name="class_id" class="form-control" id="class_id" onchange="javascript:getSubject(this)" required="required">
 <option value="">Select Class</option>
 <?php
 
@@ -140,31 +177,10 @@ else if($error){?>
                                                         </div>
                                                     </div>
 <div class="form-group">
-    <label for="default" class="col-sm-2 control-label">Subject</label>
+    <label for="subject_id" class="col-sm-2 control-label">Subject</label>
         <div class="col-sm-10">
- <select name="subject" class="form-control" id="default" required="required">
-<option value="">Select Subject</option>
-<?php
-    $sql = "SELECT * from tblsubjects";
+ <select name="subject_id" class="form-control" id="subject_id" required="required">
 
-    $query = $dbh->prepare($sql);
-
-    $query->execute();
-
-    $results=$query->fetchAll(PDO::FETCH_OBJ);
-
-    if($query->rowCount() > 0){
-
-        foreach($results as $result){
-
-?>
-<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?></option>
-<?php
-
-    }
-}
-
-?>
  </select>
                                                         </div>
                                                     </div>
@@ -208,6 +224,23 @@ else if($error){?>
                     minimumResultsForSearch: Infinity
                 });
             });
+
+            function getSubject(tag) {
+                let class_id = $(tag).val();
+                 $.ajax({
+                    type: "POST",
+                    url: 'ajax.php',
+                    data: {class_id:class_id,request_type: '_class_subject'},
+                    success: function (data) {
+                        if(data) {
+                            let options = JSON.parse(data);
+                            for(let option of options) {
+                                $('#subject_id').append('<option value="'+option.id+'">'+option.SubjectName+' Code: '+option.SubjectCode+'</option>')
+                            }
+                        }
+                    }
+                });
+            }
         </script>
     </body>
 </html>

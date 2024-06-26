@@ -9,8 +9,9 @@
 
         <div class="sidebar-nav">
             <ul class="side-nav color-gray">
+                <?php if(isset($_SESSION['alogin'])):?>
                 <li class="nav-header">
-                    <span class="">Main Category</span>
+                    <span class="">Admin Login</span>
                 </li>
                 <li>
                     <a href="dashboard"><span class="glyphicon glyphicon-home"></span> <span> Home </span> </a>
@@ -33,7 +34,8 @@
                     <ul class="child-nav">
                         <li><a href="add-teachers"><span class="glyphicon glyphicon-plus-sign"></span> <span>Add Teachers</span></a></li>
                         <li><a href="manage-teachers"><span class="glyphicon glyphicon-cog"></span> <span>Manage Teachers</span></a></li>
-                       
+                        <li><a href="add-teachercombination"><span class="glyphicon glyphicon-plus-sign"></span> <span>Add Teacher Combination </span></a></li>
+                       <a href="manage-teachercombination"><span class="glyphicon glyphicon-cog"></span> <span>Manage Teacher Combination </span></a></li>
                     </ul>
                 </li>
                 <li class="has-children">
@@ -62,7 +64,29 @@
                     </ul>
                     
                 </li>
+
                 <li><a href="change-password"><span class="glyphicon glyphicon-cog"></span> <span>Change Password</span></a></li>
+                <?php endif;?>
+
+                <?php if(isset($_SESSION['tlogin']) && $_SESSION['tlogin'] == true):?>
+                    <li class="nav-header">
+                        <span class="">Teacher Login</span>
+                    </li>
+                    <li>
+                        <a href="teacher-dashboard"><span class="glyphicon glyphicon-home"></span> <span> Home </span> </a>
+                     
+                    </li>
+                    <li><a href="change-password"><span class="glyphicon glyphicon-cog"></span> <span>Teacher Profile</span></a></li>
+                    <li class="has-children">
+                        <a href="#"><span class="glyphicon glyphicon-education"></span> <span>Result</span> <span class="glyphicon glyphicon-chevron-right"></span></a>
+                        <ul class="child-nav">
+                            <li><a href="add-teacher-result"><span class="glyphicon glyphicon-plus-sign"></span> <span>Add Result</span></a></li>
+                            <li><a href="manage-teacher-results"><span class="glyphicon glyphicon-cog"></span> <span>Manage Result</span></a></li>
+                        </ul>
+                    </li>
+                    <li><a href="change-password"><span class="glyphicon glyphicon-cog"></span> <span>Change Password</span></a></li>
+                <?php endif;?>
+
             </div>
         <!-- /.sidebar-nav -->
     </div>
