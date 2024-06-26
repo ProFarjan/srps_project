@@ -18,7 +18,7 @@ if(strlen($_SESSION['alogin'])==""){
         $subject_id=$_POST['subject_id'];
         $status=1;
 
-        $sql="INSERT INTO  teachercombination(teacher_id,class_id,subject_id,status) VALUES(:teacher_id,:class_id,:class_id,:status)";
+        $sql="INSERT INTO  teachercombination(teacher_id,class_id,subject_id,status) VALUES(:teacher_id,:class_id,:subject_id,:status)";
         $query = $dbh->prepare($sql);
         $query->bindParam(':teacher_id',$teacher_id,PDO::PARAM_STR);
         $query->bindParam(':class_id',$class_id,PDO::PARAM_STR);
